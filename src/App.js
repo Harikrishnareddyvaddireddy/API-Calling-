@@ -1,25 +1,67 @@
-import logo from './logo.svg';
 import './App.css';
-
+import './loder.css';
+import './API.css';
+import API from './API.js'
+import { useState ,useEffect} from 'react';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const [products,setProducts] = useState([])
+
+useEffect(
+  ()=> {
+    gettingdata()
+  },[]
+)
+async function gettingdata(){
+   let data =  await fetch('https://fakestoreapi.com/products');
+   let productlist = await data.json();
+   setProducts(productlist)
+    console.log(productlist)
+}
+
+
+
+
+
+
+  if(products.length===0){
+    return(
+<div className="loader">
+  <div className="loader-inner">
+    <div className="loader-line-wrap">
+      <div className="loader-line" />
     </div>
-  );
+    <div className="loader-line-wrap">
+      <div className="loader-line" />
+    </div>
+    <div className="loader-line-wrap">
+      <div className="loader-line" />
+    </div>
+    <div className="loader-line-wrap">
+      <div className="loader-line" />
+    </div>
+    <div className="loader-line-wrap">
+      <div className="loader-line" />
+    </div>
+  </div>
+</div>  
+ )
+  }
+  return (
+    <div className="product-list">
+    {
+
+  products.map((p) => (
+    <API
+      image={p.image}
+      title={p.title}
+      price={p.price}
+      rating={p.rating}
+      key={p.id}
+    />
+  )) 
+    }
+
+</div>  );
 }
 
 export default App;
